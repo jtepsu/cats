@@ -159,6 +159,18 @@ def autocorrect(typed_word, word_list, diff_function, limit):
     """
     # BEGIN PROBLEM 5
     "*** YOUR CODE HERE ***"
+    if typed_word in word_list:
+        return typed_word
+    min_diff = [None, 999]
+    for word in word_list:
+        diff = diff_function(typed_word, word, limit)
+        if diff < min_diff[1]:
+            min_diff = [word, diff]
+    if min_diff[1] > limit:
+        return typed_word
+    else:
+        return min_diff[0]
+
     # END PROBLEM 5
 
 
@@ -185,9 +197,20 @@ def feline_fixes(typed, source, limit):
     5
     """
     # BEGIN PROBLEM 6
-    assert False, 'Remove this line'
+    if typed == source:
+        return 0
+    if limit == 0:
+        return 1
+    if typed == '':
+        return 1 + feline_fixes('', source[1:], limit-1)
+    if source == '':
+        return 1 + feline_fixes(typed[1:], '', limit)
+    else:
+        if typed[0] == source[0]:
+            return feline_fixes(typed[1:], source[1:], limit)
+        else:
+            return 1 + feline_fixes(typed[1:], source[1:], limit-1)
     # END PROBLEM 6
-
 
 ############
 # Phase 2B #
@@ -209,23 +232,36 @@ def minimum_mewtations(typed, source, limit):
     >>> minimum_mewtations("ckiteus", "kittens", big_limit) # ckiteus -> kiteus -> kitteus -> kittens
     3
     """
-    assert False, 'Remove this line'
-    if ___________: # Base cases should go here, you may add more base cases as needed.
+    if typed == source: # Base cases should go here, you may add more base cases as needed.
         # BEGIN
         "*** YOUR CODE HERE ***"
+        return 0
         # END
     # Recursive cases should go below here
-    if ___________: # Feel free to remove or add additional cases
-        # BEGIN
-        "*** YOUR CODE HERE ***"
-        # END
+    t_in_s = source.find(typed)
+    s_in_t = typed.find(source)
+    m = 0
+    if t_in_s != -1:
+        m += t_in_s
+        source = source[m:]
+        m += (len(source) - len(typed))
+        if m <= limit:
+            return m
+        else:
+            return limit + 1
+    
+    if s_in_t != -1:
+        m += s_in_t
+        typed = typed[m:]
+        m += (len(typed) - len(source))
+        if m <= limit:
+            return m
+        else:
+            return limit + 1
+    
     else:
-        add = ... # Fill in these lines
-        remove = ...
-        substitute = ...
-        # BEGIN
-        "*** YOUR CODE HERE ***"
-        # END
+        pass
+        
 
 
 def final_diff(typed, source, limit):
