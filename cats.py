@@ -248,8 +248,6 @@ def minimum_mewtations(typed, source, limit):
             return min(added, min(removed, subbed))
         
     return 1 + minimum_mewtations(typed + source[len(typed)], source, limit-1)
-    
-        
 
 
 def final_diff(typed, source, limit):
@@ -290,6 +288,15 @@ def report_progress(typed, source, user_id, upload):
     """
     # BEGIN PROBLEM 8
     "*** YOUR CODE HERE ***"
+    correct = []
+    for i in range(len(typed)):
+        if typed[i] == source[i]:
+            correct.append(typed[i])
+        else:
+            break
+    ratio = len(correct) / len(source)
+    upload({'id': user_id, 'progress': ratio})
+    return ratio
     # END PROBLEM 8
 
 
@@ -312,6 +319,12 @@ def time_per_word(words, timestamps_per_player):
     """
     # BEGIN PROBLEM 9
     "*** YOUR CODE HERE ***"
+    times = []
+    for i in range(len(timestamps_per_player)):
+        times.append([])
+        for j in range(len(words)):
+            times[i].append(timestamps_per_player[i][j+1] - timestamps_per_player[i][j])  
+    return match(words, times)
     # END PROBLEM 9
 
 
@@ -334,6 +347,17 @@ def fastest_words(match):
     word_indices = range(len(get_all_words(match)))    # contains an *index* for each word
     # BEGIN PROBLEM 10
     "*** YOUR CODE HERE ***"
+    result = [[] for player in player_indices]
+    for i in range(len(word_indices)):
+        fastest_player = 999
+        fastest_time = 999
+        for j in range(len(player_indices)):
+            if time(match, j, i) < fastest_time:
+                fastest_time = time(match, j, i)
+                fastest_player = j
+        result[fastest_player].append(get_word(match, i))
+    return result
+    
     # END PROBLEM 10
 
 
